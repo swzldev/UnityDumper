@@ -7,7 +7,9 @@
 struct Il2CppMetadataClass {
 	std::vector<CppObject*> fields;
 
-    size_t GetTrueSize(float version) {
+    std::streampos position;
+
+    size_t GetTrueSize(float version) const {
         size_t size = 0;
 		for (CppObject* field : fields) {
 			if (version < field->minVersion || version > field->maxVersion) continue;

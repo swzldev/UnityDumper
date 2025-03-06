@@ -97,6 +97,20 @@ bool MetadataFile::Load(const std::string& path) {
 			// TODO: process dictionary
 		}
 	}
+	if (m_Version > 20 && m_Version < 29) {
+		m_AttributeTypeRanges = ReadMetadataClassArray<Il2CppCustomAttributeTypeRange>(m_Header.attributeTypesOffset.value, m_Header.attributeTypesCount.value);
+		m_AttributeTypes = ReadArray<int32_t>(m_Header.attributeDataOffset.value, m_Header.attributeDataSize.value);
+	}
+	if (m_Version >= 29) {
+		m_AttributeDataRanges = ReadMetadataClassArray<Il2CppCustomAttributeDataRange>(m_Header.attributeDataRangeOffset.value, m_Header.attributeDataRangeSize.value);
+	}
+	if (m_Version <= 24.1) {
+		m_RgctxEntries = ReadMetadataClassArray<Il2CppRGCTXDefinition>(m_Header.rgctxEntriesOffset.value, m_Header.rgctxEntriesCount.value);
+	}
+	return true;
+	if (!m_MetadataFile.eof()) {
+		Output::Error("Unexpected data in metadata file: %s", path.c_str());
+	}
 }
 
 std::string MetadataFile::GetString(uint32_t index) {

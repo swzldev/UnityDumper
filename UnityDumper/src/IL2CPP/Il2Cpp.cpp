@@ -57,7 +57,7 @@ std::string GetMetadataPathManual() {
 	}
 }
 
-bool IsMetadataSupported(int32_t version) {
+bool IsMetadataSupported(float version) {
 	if (version < UDUMPER_MIN_METADATA_VERSION || version > UDUMPER_MAX_METADATA_VERSION) {
 		return false;
 	}
@@ -83,9 +83,9 @@ void AnalyzeIl2Cpp(std::string gamePath) {
 	if (!globalMetadata.Load(metadataPath)) {
 		Output::Fatal("Failed to load metadata file.", ERROR_FAIL_LOAD_METADATA);
 	}
-	int32_t version = globalMetadata.GetHeader().version.value;
+	float version = globalMetadata.GetVersion();
 	if (!IsMetadataSupported(version)) {
 		Output::Fatal("Unsupported metadata version: %d", version, ERROR_UNSUPPORTED_METADATA);
 	}
-	Output::Log("Metadata loaded. Version: %d", version);
+	Output::Log("Metadata loaded. Version: %f", version);
 }
